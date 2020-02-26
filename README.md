@@ -22,7 +22,10 @@ mvn install:install-file -Dfile=D:\tile38-client-1.0.0.jar -DgroupId=com.mapabc.
         </dependency>
         
 接下来就可以在工程中使用tile38了。
-下面以 springboot 为例的配置类代码：
+下面以 springboot 为例的配置类代码 : 
+
+
+
 
 import com.mapabc.api.Tile38Template;
 import com.mapabc.api.Tile38TemplateImpl;
@@ -33,13 +36,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Tile38ClientConfig {
-
     @Value("${tile38.host}")
     private String host;
-
     @Value("${tile38.port}")
     private Integer port;
-
     @Bean
     public Tile38Template getTile38Template(){
         Tile38Client instance = Tile38Client.getInstance(host, port, null);
@@ -52,10 +52,8 @@ public class Tile38ClientConfig {
 
 @Service
 public class TestServiceImpl implements TestService{
-
     @Autowired
     Tile38Template tile38Template;
-
     public void test(){
         String data = tile38Template.getKeys("OD-*");
         JSONArray keys = JSONObject.parseObject(data).getJSONArray("keys");
