@@ -31,11 +31,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @Author ke.han
- * @Date 2019/11/13 14:35
- **/
- 
 @Configuration
 public class Tile38ClientConfig {
 
@@ -50,11 +45,11 @@ public class Tile38ClientConfig {
         Tile38Client instance = Tile38Client.getInstance(host, port, null);
         return new Tile38TemplateImpl(instance);
     }
-
 }
 
 使用示例：
 首先在类中注入Tile38Template类，然后就可以在方法中直接使用了：
+
 @Service
 public class TestServiceImpl implements TestService{
 
@@ -66,7 +61,6 @@ public class TestServiceImpl implements TestService{
         JSONArray keys = JSONObject.parseObject(data).getJSONArray("keys");
         .....
     }
-
 }
     
     
