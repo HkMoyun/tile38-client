@@ -11,6 +11,7 @@ import io.lettuce.core.codec.StringCodec;
 import io.lettuce.core.dynamic.RedisCommandFactory;
 import io.lettuce.core.protocol.LettuceCharsets;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -18,25 +19,34 @@ import java.util.Arrays;
  * @Author ke.han
  * @Date 2019/11/6 17:39
  **/
-public class Tile38Client {
+public class Tile38Client implements Serializable {
 
-    private volatile static Tile38Client tile38Client = null;
+    private Tile38Commands commands = null;
 
-    private volatile static Tile38Commands commands = null;
+    private RedisClient client = null;
 
-    private volatile static RedisClient client = null;
+    private StatefulRedisConnection<String, String> connect = null;
 
-    public static Tile38Client getInstance(String host,int port,String passWord){
-        if(tile38Client == null){
-            synchronized (Tile38Client.class) {
-                if(tile38Client == null){
-                    tile38Client = new Tile38Client();
-                    client = tile38Client.createRedisClient(host,port);
-                    commands = tile38Client.createCommands(client,passWord);
-                }
+    public Tile38Client(){
+        client = this.createRedisClient("127.0.0.1",9851);
+        commands = this.createCommands(client,"");
+    }
+
+    public Tile38Client(String host,int port,String passWord){
+        client = this.createRedisClient(host,port);
+        commands = this.createCommands(client,passWord);
+    }
+
+    public void close(){
+        if(connect != null){
+            try {
+                connect.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            connect = null;
         }
-        return tile38Client;
+        commands = null;
     }
 
     public Tile38Commands getCommands(){
@@ -47,11 +57,9 @@ public class Tile38Client {
         return client;
     }
 
-    private Tile38Client(){}
-
     private Tile38Commands createCommands(RedisClient client,String passWord){
-        StatefulRedisConnection<String, String> connect = client.connect();
-        RedisCommandFactory factory = new RedisCommandFactory(connect, Arrays.asList(new ByteArrayCodec(), new StringCodec(LettuceCharsets.UTF8)));
+        this.connect = client.connect();
+        RedisCommandFactory factory = new RedisCommandFactory(this.connect, Arrays.asList(new ByteArrayCodec(), new StringCodec(LettuceCharsets.UTF8)));
         Tile38Commands commands = factory.getCommands(Tile38Commands.class);
         if(!StringUtil.isBlack(passWord)){//若有密码则先登录
             commands.auth(passWord);

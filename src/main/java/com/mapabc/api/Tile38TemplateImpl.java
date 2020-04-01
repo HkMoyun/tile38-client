@@ -10,6 +10,7 @@ import com.mapabc.entity.Rectangle;
 import com.mapabc.eunms.DetectType;
 import com.mapabc.util.StringUtil;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
 
 /**
  * @Author ke.han
@@ -21,6 +22,8 @@ public class Tile38TemplateImpl implements Tile38Template {
 
     private RedisClient client = null;
 
+    private Tile38Client tile38Client = null;
+
     public Tile38Commands getCommands() {
         return commands;
     }
@@ -29,7 +32,14 @@ public class Tile38TemplateImpl implements Tile38Template {
         return client;
     }
 
+    public void close(){
+        if(tile38Client != null){
+            tile38Client.close();
+        }
+    }
+
     public Tile38TemplateImpl(Tile38Client tile38Client){
+        this.tile38Client = tile38Client;
         this.commands = tile38Client.getCommands();
         this.client = tile38Client.getRedisClient();
     }

@@ -383,6 +383,10 @@ public interface Tile38Commands extends Commands {
     @Command("SETHOOK ?0 ?1 NEARBY ?2 FENCE DETECT ?3 POINT ?4 ?5 ?6")
     String setHook(String webHook, String addr, String key, String detect, double Lon, double Lat, int length);
 
+    //SETHOOK myhook http://10.0.1.5/hook NEARBY people FENCE ROAM people * 5000
+    @Command("SETHOOK ?0 ?1 NEARBY ?2 FENCE ROAM ?3 * ?4")
+    String setHook(String webHook, String addr, String key, String key1, int length);
+
     /**
      * 查询钩子
      * @param hookName
