@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="tile38-client-1.0.0">
-    <output-path>$PROJECT_DIR$/out/artifacts/tile38_client_1_0_0</output-path>
-    <root id="archive" name="tile38-client-1.0.0.jar">
-      <element id="dir-copy" path="$PROJECT_DIR$/target/classes" />
-    </root>
-  </artifact>
-</component>
