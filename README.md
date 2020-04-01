@@ -49,7 +49,7 @@ public class Tile38ClientConfig {
     
     @Bean
     public Tile38Template getTile38Template(){
-        Tile38Client instance = Tile38Client.getInstance(host, port, null);
+        Tile38Client instance = new Tile38Client(host, port, null);
         return new Tile38TemplateImpl(instance);
     }
 }
