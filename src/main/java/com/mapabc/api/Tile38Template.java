@@ -17,17 +17,17 @@ public interface Tile38Template {
 
     public String auth(String password);
 
-    public void flushdb();
+    public void flushDB();
 
     public void gc();
 
-    public String output(String output);
+    public String outPut(String output);
 
     public String follow(String ip, int port);
 
     public void quit();
 
-    public void aofshrink();
+    public void aofShrink();
 
     public String intersects(String key, Element element);
 
@@ -88,6 +88,8 @@ public interface Tile38Template {
     public String pDelChans(String chans);
 
     public String setHook(String webHook, String addr, String key, DetectType detect, double Lon, double Lat, int length);
+
+    public String setHook(String webHook, String addr, String pointKey, String key, String id);
 
     public String getHook(String hookName);
 

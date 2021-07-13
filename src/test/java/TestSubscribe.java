@@ -8,9 +8,9 @@ import io.lettuce.core.pubsub.api.sync.RedisPubSubCommands;
  * @Author ke.han
  * @Date 2020/3/21 14:37
  **/
-public class TestTile38 {
+public class TestSubscribe {
 
-    public void aaa(){
+    public void subscribe(){
 
         Tile38Client tile38Client = new Tile38Client("127.0.0.1", 9851,"");
         Tile38Commands commands = tile38Client.getCommands();
