@@ -188,6 +188,21 @@ public interface Tile38Commands extends Commands {
     String withIn(String key, int limit, long startTime, long endTime, String key1, String id);
 
     /**
+     * 返回 扇形区域内 完全包含的所有对象的列表
+     * 一个扇形多边形特征，跨越两个给定方位角、一个中心点和一个半径。0 度方位描述地理上的北方。
+     * 返回队列集合中的所有对象，它们与给定半径中的原点成 0 度到 90 度角（以米为单位）。
+     * @param key
+     * @param lng
+     * @param lat
+     * @param r
+     * @param startAngle
+     * @param endAngle
+     * @return
+     */
+    @Command("WITHIN ?0 SECTOR ?1 ?2 ?3 ?4 ?5")
+    String withIn(String key, double lng, double lat, int r, int startAngle, int endAngle);
+
+    /**
      * 返回集合(key)中所有对象的最小边界矩形
      *
      * @param key
@@ -229,7 +244,7 @@ public interface Tile38Commands extends Commands {
      * @param lat
      * @return
      */
-    @Command("SET ?0 ?1 POINT ?2")
+    @Command("SET ?0 ?1 POINT ?2 ?3")
     String setElement(String key, String id, double lng, double lat);
 
     /**
@@ -444,6 +459,19 @@ public interface Tile38Commands extends Commands {
      */
     @Command("SETHOOK ?0 ?1 WITHIN ?2 GET ?3 ?4")
     String setHook(String webHook, String addr, String pointKey, String key, String id);
+
+    /**
+     *
+     * @param webHook
+     * @param addr
+     * @param pointKey
+     * @param detect
+     * @param key
+     * @param id
+     * @return
+     */
+    @Command("SETHOOK ?0 ?1 WITHIN ?2 FENCE DETECT ?3 GET ?4 ?5")
+    String setHook(String webHook, String addr, String pointKey, String detect, String key, String id);
 
     /**
      * 查询钩子
