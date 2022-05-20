@@ -3,16 +3,10 @@ package com.mapabc.api;
 import com.alibaba.fastjson.JSONObject;
 import com.mapabc.client.Tile38Client;
 import com.mapabc.commands.Tile38Commands;
-import com.mapabc.entity.Element;
-import com.mapabc.entity.Fence;
-import com.mapabc.entity.Point;
-import com.mapabc.entity.Rectangle;
+import com.mapabc.entity.*;
 import com.mapabc.eunms.DetectType;
 import com.mapabc.util.StringUtil;
 import io.lettuce.core.RedisClient;
-import io.lettuce.core.api.StatefulRedisConnection;
-
-import java.io.Serializable;
 
 /**
  * @Author ke.han
@@ -167,6 +161,14 @@ public class Tile38TemplateImpl implements Tile38Template {
             Double lng2 = rectangle.getRightUpper().getLng();
             Double lat2 = rectangle.getRightUpper().getLat();
             return commands.withIn(key, lng1, lat1, lng2, lat2);
+        } else if (element instanceof Sector) {
+            Sector sector = (Sector) element;
+            double lng = sector.getLng();
+            double lat = sector.getLat();
+            int r = sector.getR();
+            int startAngle = sector.getStartAngle();
+            int endAngle = sector.getEndAngle();
+            return commands.withIn(key, lng, lat, r, startAngle, endAngle);
         } else {
             Fence fence = (Fence) element;
             return commands.withIn(key, JSONObject.toJSONString(fence.getFence()));
@@ -383,11 +385,20 @@ public class Tile38TemplateImpl implements Tile38Template {
 
     @Override
     public String setHook(String hookName, String url, String pointKey, String key, String id) {
-        if (StringUtil.isBlack(hookName, url, key)) {
+        if (StringUtil.isBlack(hookName, url, key, pointKey, id)) {
             return "hookName or url or key is not null";
         }
         return commands.setHook(hookName, url, pointKey, key, id);
     }
+
+    @Override
+    public String setHook(String hookName, String url, String pointKey, String detect, String key, String id) {
+        if (StringUtil.isBlack(hookName, url, key, detect, pointKey, id)) {
+            return "hookName or url or key is not null";
+        }
+        return commands.setHook(hookName, url, pointKey, detect, key, id);
+    }
+
 
     @Override
     public String getHook(String hookName) {

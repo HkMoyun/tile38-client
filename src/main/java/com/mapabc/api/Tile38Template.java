@@ -91,6 +91,8 @@ public interface Tile38Template {
 
     public String setHook(String webHook, String addr, String pointKey, String key, String id);
 
+    String setHook(String webHook, String addr, String pointKey, String detect, String key, String id);
+
     public String getHook(String hookName);
 
     public String delHook(String hookName);
