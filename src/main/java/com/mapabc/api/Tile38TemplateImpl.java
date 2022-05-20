@@ -217,7 +217,7 @@ public class Tile38TemplateImpl implements Tile38Template {
         }
         if (element instanceof Point) {
             Point point = (Point) element;
-            return commands.setElement(key, id, point.getLat(), point.getLng());
+            return commands.setElement(key, id, point.getLng(), point.getLat());
         } else if (element instanceof Rectangle) {
             Rectangle rectangle = (Rectangle) element;
             Double lng1 = rectangle.getLeftDown().getLng();
