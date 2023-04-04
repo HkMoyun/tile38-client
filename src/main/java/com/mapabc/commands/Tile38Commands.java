@@ -106,6 +106,17 @@ public interface Tile38Commands extends Commands {
     String nearBy(String key, double lng, double lat, int length);
 
     /**
+     * Nearby data with distance
+     *
+     * @param key
+     * @param lng
+     * @param lat
+     * @return
+     */
+    @Command("NEARBY ?0 DISTANCE POINT ?1 ?2 ?3 ")
+    String nearByWithDistance(String key, double lng, double lat, int length);
+
+    /**
      * 附近 - 查找最接近给定点的对象。
      *
      * @param key

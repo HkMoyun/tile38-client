@@ -33,6 +33,8 @@ public interface Tile38Template {
 
     public String nearBy(String key, double lng, double lat, int length);
 
+    public String nearByWithDistance(String key, double lng, double lat, int length);
+
     public String nearByLimit(String key, int limit, double lng, double lat);
 
     public String getKeys(String key);
