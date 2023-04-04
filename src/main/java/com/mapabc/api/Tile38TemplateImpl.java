@@ -117,6 +117,14 @@ public class Tile38TemplateImpl implements Tile38Template {
     }
 
     @Override
+    public String nearByWithDistance(String key, double lng, double lat, int length) {
+        if (StringUtil.isBlack(key)) {
+            return "key is not null";
+        }
+        //此处 lat,lng 坐标反转是为了匹配tile38坐标顺序格式
+        return commands.nearByWithDistance(key, lat, lng, length);
+    }
+    @Override
     public String nearByLimit(String key, int limit, double lng, double lat) {
         if (StringUtil.isBlack(key)) {
             return "key is not null";
