@@ -1,9 +1,13 @@
 package com.mapabc.api;
 
+import com.mapabc.commands.BatchedCommandType;
 import com.mapabc.commands.Tile38Commands;
 import com.mapabc.entity.Element;
 import com.mapabc.eunms.DetectType;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.protocol.CommandArgs;
+
+import java.util.List;
 
 /**
  * @Author ke.han
@@ -101,4 +105,6 @@ public interface Tile38Template {
 
     public String pDelHook(String hookName);
 
+    public List<List<Object>> executeBatchedCommands(List<CommandArgs<String, String>> commandArgsList , BatchedCommandType command);
+    public List<List<Object>> executeParallelBatchedCommands(List<CommandArgs<String, String>> commandArgsList, BatchedCommandType commandType, int numberOfThreads);
 }
