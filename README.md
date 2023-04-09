@@ -5,24 +5,10 @@ Add this dependency to your pom:
         <dependency>
             <groupId>tile38-cli</groupId>
             <artifactId>com.mapabc</artifactId>
-            <version>1.0.1</version>
+            <version>2.0.1</version>
         </dependency>
         
-接下来就可以在工程中使用tile38了。
-下面以 springboot 为例的配置类代码:
 
-
-import com.mapabc.api.Tile38Template;
-
-import com.mapabc.api.Tile38TemplateImpl;
-
-import com.mapabc.client.Tile38Client;
-
-import org.springframework.beans.factory.annotation.Value;
-
-import org.springframework.context.annotation.Bean;
-
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 
@@ -41,8 +27,6 @@ public class Tile38ClientConfig {
     }
 }
 
-使用示例：
-首先在类中注入Tile38Template类，然后就可以在方法中直接使用了：
 
 @Service
 
