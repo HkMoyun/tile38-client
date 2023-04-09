@@ -6,7 +6,7 @@
 
     <groupId>tile38-cli</groupId>
     <artifactId>com.mapabc</artifactId>
-    <version>1.0.1</version>
+    <version>2.0.1</version>
     <build>
         <plugins>
             <plugin>
