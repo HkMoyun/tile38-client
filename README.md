@@ -1,24 +1,11 @@
 # tile38-client
-针对 tile38 地理空间数据库封装的的连接客户端
 
-运行工程，将代码打成jar包后，把jar包放在D盘根目录。
+Add this dependency to your pom:
 
-使用mvn把jar包放入本地maven仓库命令：
-mvn install:install-file -Dfile=D:\tile38-client-1.0.0.jar -DgroupId=com.mapabc.tile38-client -DartifactId=tile38-client -Dversion=1.0.0 -Dpackaging=jar
-
-在项目工程中引入jar包依赖pom:
-
-        <!-- tiel38 链接依赖（生菜客户端） -->
         <dependency>
-            <groupId>io.lettuce</groupId>
-            <artifactId>lettuce-core</artifactId>
-            <version>5.2.1.RELEASE</version>
-        </dependency>
-        <!-- mapabc-tiel38 客户端 -->
-        <dependency>
-            <groupId>com.mapabc.tile38-client</groupId>
-            <artifactId>tile38-client</artifactId>
-            <version>1.0.0</version>
+            <groupId>tile38-cli</groupId>
+            <artifactId>com.mapabc</artifactId>
+            <version>1.0.1</version>
         </dependency>
         
 接下来就可以在工程中使用tile38了。

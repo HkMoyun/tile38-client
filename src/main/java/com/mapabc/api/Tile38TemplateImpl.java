@@ -263,6 +263,16 @@ public class Tile38TemplateImpl implements Tile38Template {
     }
 
     @Override
+    public String setElementWithField(String key, String id, String geojson , String fieldKeyName , String fieldValue) {
+        return commands.setElementWithField(key, id, geojson , fieldKeyName , fieldValue);
+    }
+
+    @Override
+    public String setElementWithFields(String key, String id, String geojson , String field1KeyName , String field1Value , String field2KeyName , String field2Value) {
+        return commands.setElementWithFields(key, id, geojson , field1KeyName , field1Value , field2KeyName , field2Value);
+    }
+
+    @Override
     public String dropObjInKey(String key) {
         if (StringUtil.isBlack(key)) {
             return "key is not null";

@@ -61,6 +61,10 @@ public interface Tile38Template {
 
     public String setElement(String key, String id, String geojson);
 
+    public String setElementWithField(String key, String id, String geojson , String fieldKeyName , String fieldValue);
+
+    public String setElementWithFields(String key, String id, String geojson , String field1KeyName , String field1Value , String field2KeyName , String field2Value) ;
+
     public String dropObjInKey(String key);
 
     public String pDelObjInKey(String key, String id);

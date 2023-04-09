@@ -23,6 +23,9 @@ public class TestRun {
         String COMPUTE_POINT = template.getHook("*");
         System.out.println(COMPUTE_POINT);
 
+        //test for setting data with fields
+        template.setElementWithField("fleet" , "id" , "{\"type\":\"Polygon\",\"coordinates\":[[[-111.9787,33.4411],[-111.8902,33.4377],[-111.8950,33.2892],[-111.9739,33.2932],[-111.9787,33.4411]]]}" , "timestamp" , "12334555");
+
     }
 
 
