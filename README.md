@@ -10,9 +10,8 @@ Add this dependency to your pom:
         
 
 
-@Configuration
+Configuration
 
-public class Tile38ClientConfig {
 
     @Value("${tile38.host}")
     private String host;
@@ -25,12 +24,10 @@ public class Tile38ClientConfig {
         Tile38Client instance = new Tile38Client(host, port, null);
         return new Tile38TemplateImpl(instance);
     }
-}
 
 
-@Service
+Service
 
-public class TestServiceImpl implements TestService{
 
     @Autowired
     Tile38Template tile38Template;
@@ -39,6 +36,6 @@ public class TestServiceImpl implements TestService{
         JSONArray keys = JSONObject.parseObject(data).getJSONArray("keys");
         .....
     }
-}
+
     
     
