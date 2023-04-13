@@ -2,11 +2,28 @@ package com.mapabc.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mapabc.client.Tile38Client;
+import com.mapabc.commands.BatchedCommandType;
 import com.mapabc.commands.Tile38Commands;
 import com.mapabc.entity.*;
 import com.mapabc.eunms.DetectType;
 import com.mapabc.util.StringUtil;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisFuture;
+import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.async.RedisAsyncCommands;
+import io.lettuce.core.codec.StringCodec;
+import io.lettuce.core.output.ArrayOutput;
+import io.lettuce.core.protocol.CommandArgs;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @Author ke.han
@@ -246,6 +263,16 @@ public class Tile38TemplateImpl implements Tile38Template {
     }
 
     @Override
+    public String setElementWithField(String key, String id, String geojson , String fieldKeyName , String fieldValue) {
+        return commands.setElementWithField(key, id, geojson , fieldKeyName , fieldValue);
+    }
+
+    @Override
+    public String setElementWithFields(String key, String id, String geojson , String field1KeyName , String field1Value , String field2KeyName , String field2Value) {
+        return commands.setElementWithFields(key, id, geojson , field1KeyName , field1Value , field2KeyName , field2Value);
+    }
+
+    @Override
     public String dropObjInKey(String key) {
         if (StringUtil.isBlack(key)) {
             return "key is not null";
@@ -430,6 +457,91 @@ public class Tile38TemplateImpl implements Tile38Template {
             return "hookName is not null";
         }
         return commands.pDelHook(hookName);
+    }
+
+    @Override
+    public List<List<Object>> executeBatchedCommands(@NotNull List<CommandArgs<String, String>> commandArgsList , BatchedCommandType commandType) {
+        List<List<Object>> results = new ArrayList<>();
+        RedisAsyncCommands<String, String> asyncCommands = client.connect().async();
+        asyncCommands.setAutoFlushCommands(false);
+        List<RedisFuture<List<Object>>> futureResults = new ArrayList<>();
+        for (CommandArgs<String, String> commandArgs : commandArgsList) {
+            RedisFuture<List<Object>> future = asyncCommands.dispatch(
+                    commandType,
+                    new ArrayOutput<>(StringCodec.UTF8),
+                    commandArgs);
+            futureResults.add(future);
+        }
+        asyncCommands.flushCommands();
+        for (RedisFuture<List<Object>> future : futureResults) {
+            try {
+                results.add(future.get());
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        asyncCommands.setAutoFlushCommands(true);
+        return results;
+    }
+
+    @Override
+    public List<List<Object>> executeParallelBatchedCommands(@NotNull List<CommandArgs<String, String>> commandArgsList, BatchedCommandType commandType , int numberOfThreads) {
+        ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+        int chunkSize = (int) Math.ceil((double) commandArgsList.size() / numberOfThreads);
+        List<CompletableFuture<List<List<Object>>>> parallelFutures = IntStream.range(0, numberOfThreads)
+                .mapToObj(i -> {
+                    int startIndex = i * chunkSize;
+                    int endIndex = Math.min(startIndex + chunkSize, commandArgsList.size());
+                    List<CommandArgs<String, String>>  subList = commandArgsList.subList(startIndex, endIndex);
+
+                    return CompletableFuture.supplyAsync(() -> {
+                        return executeBatch(subList,commandType, client.connect());
+                    }, executor);
+                })
+                .collect(Collectors.toList());
+        CompletableFuture.allOf(parallelFutures.toArray(new CompletableFuture[0])).join();
+        List<List<Object>> results = parallelFutures.stream()
+                .map(CompletableFuture::join)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        executor.shutdown();
+        return results;
+    }
+
+    private List<List<Object>> executeBatch(@NotNull List<CommandArgs<String, String>> commandArgsList, BatchedCommandType commandType, StatefulRedisConnection<String, String> connection) {
+        RedisAsyncCommands<String, String> asyncCommands = connection.async();
+        // Start pipelining
+        asyncCommands.setAutoFlushCommands(false);
+
+        // Create futures for all commands
+        List<CompletableFuture<List<Object>>> futureResults = commandArgsList.stream()
+                .map(commandArgs -> asyncCommands.dispatch(
+                        commandType,
+                        new ArrayOutput<>(StringCodec.UTF8),
+                        commandArgs))
+                .map(this::safeCastToCompletableFuture)
+                .collect(Collectors.toList());
+
+        // Execute the pipelined commands
+        asyncCommands.flushCommands();
+
+        // Wait for all futures to complete
+        CompletableFuture.allOf(futureResults.toArray(new CompletableFuture[0])).join();
+
+        // Collect the results
+        List<List<Object>> results = futureResults.stream()
+                .map(CompletableFuture::join)
+                .collect(Collectors.toList());
+
+        // Restore normal behavior
+        asyncCommands.setAutoFlushCommands(true);
+
+        return results;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> CompletableFuture<T> safeCastToCompletableFuture(RedisFuture<T> redisFuture) {
+        return (CompletableFuture<T>) redisFuture;
     }
 
 }

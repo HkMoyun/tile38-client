@@ -1,9 +1,13 @@
 package com.mapabc.api;
 
+import com.mapabc.commands.BatchedCommandType;
 import com.mapabc.commands.Tile38Commands;
 import com.mapabc.entity.Element;
 import com.mapabc.eunms.DetectType;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.protocol.CommandArgs;
+
+import java.util.List;
 
 /**
  * @Author ke.han
@@ -57,6 +61,10 @@ public interface Tile38Template {
 
     public String setElement(String key, String id, String geojson);
 
+    public String setElementWithField(String key, String id, String geojson , String fieldKeyName , String fieldValue);
+
+    public String setElementWithFields(String key, String id, String geojson , String field1KeyName , String field1Value , String field2KeyName , String field2Value) ;
+
     public String dropObjInKey(String key);
 
     public String pDelObjInKey(String key, String id);
@@ -101,4 +109,6 @@ public interface Tile38Template {
 
     public String pDelHook(String hookName);
 
+    public List<List<Object>> executeBatchedCommands(List<CommandArgs<String, String>> commandArgsList , BatchedCommandType command);
+    public List<List<Object>> executeParallelBatchedCommands(List<CommandArgs<String, String>> commandArgsList, BatchedCommandType commandType, int numberOfThreads);
 }
