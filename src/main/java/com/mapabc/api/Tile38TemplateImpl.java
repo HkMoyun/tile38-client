@@ -104,6 +104,14 @@ public class Tile38TemplateImpl implements Tile38Template {
     }
 
     @Override
+    public String delEntry(String key, String member) {
+        if (StringUtil.isBlack(key) || StringUtil.isBlack(member)) {
+            return "key is not null";
+        }
+        return commands.delEntry(key,member);
+    }
+
+    @Override
     public String intersects(String key, Element element) {
         if (StringUtil.isBlack(key)) {
             return "key is not null";

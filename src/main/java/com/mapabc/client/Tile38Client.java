@@ -28,7 +28,6 @@ public class Tile38Client implements Serializable {
     private RedisClient client = null;
 
     private StatefulRedisConnection<String, String> connect = null;
-
     public Tile38Client() {
         client = this.createRedisClient("127.0.0.1", 9851);
         commands = this.createCommands(client, "");
@@ -37,6 +36,11 @@ public class Tile38Client implements Serializable {
     public Tile38Client(String host, int port, String passWord) {
         client = this.createRedisClient(host, port);
         commands = this.createCommands(client, passWord);
+    }
+
+    public Tile38Client(String sentinelHost, int sentinelPort, String password , String masterId) {
+        client = this.createRedisClient(sentinelHost , sentinelPort , password , masterId);
+        commands = this.createCommands(client, password);
     }
 
     public void close() {
@@ -78,6 +82,11 @@ public class Tile38Client implements Serializable {
 
     private RedisClient createRedisClient(String host, int port) {
         return RedisClient.create(RedisURI.create(host, port));
+    }
+
+    private RedisClient createRedisClient(String sentinelHost, int sentinelPort, String password , String masterId) {
+        RedisURI redisURI = RedisURI.Builder.sentinel(sentinelHost, sentinelPort, masterId, password).withDatabase(0).build();
+        return RedisClient.create(redisURI);
     }
 
 }

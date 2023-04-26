@@ -33,6 +33,8 @@ public interface Tile38Template {
 
     public void aofShrink();
 
+    public String delEntry(String key, String member);
+
     public String intersects(String key, Element element);
 
     public String nearBy(String key, double lng, double lat, int length);

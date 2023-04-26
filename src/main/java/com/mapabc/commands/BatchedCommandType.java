@@ -221,7 +221,7 @@ public enum BatchedCommandType implements ProtocolKeyword {
     NEARBY,
     WITHIN,
     INTERSECTS,
-
+    SETHOOK,
     CLUSTER;
     public final byte[] bytes;
 
