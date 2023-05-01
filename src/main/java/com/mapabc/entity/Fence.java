@@ -1,6 +1,8 @@
 package com.mapabc.entity;
 
 import com.alibaba.fastjson.JSONObject;
+import io.lettuce.core.codec.StringCodec;
+import io.lettuce.core.protocol.CommandArgs;
 
 import java.io.Serializable;
 
@@ -11,6 +13,12 @@ import java.io.Serializable;
 public class Fence extends Element implements Serializable {
 
     private JSONObject fence;
+
+    @Override
+    public CommandArgs<String, String> getCommandArgs(String key, String member) {
+        String geojson = JSONObject.toJSONString(fence);
+        return new CommandArgs<>(StringCodec.UTF8).add(key).add(member).add("OBJECT").add(geojson);
+    }
 
     public Fence() {}
 
