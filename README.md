@@ -1,10 +1,13 @@
 # tile38-client
 
+First
+mvn install:install-file -Dfile=tile38-cli-2.0.1.jar -DgroupId=com.mapabc.tile38-cli -DartifactId=tile38-cli -Dversion=2.0.1 -Dpackaging=jar
+
 Add this dependency to your pom:
 
         <dependency>
-            <groupId>tile38-cli</groupId>
-            <artifactId>com.mapabc</artifactId>
+            <groupId>com.mapabc</groupId>
+            <artifactId>tile38-cli</artifactId>
             <version>2.0.1</version>
         </dependency>
         

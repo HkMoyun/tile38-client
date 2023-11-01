@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>tile38-cli</groupId>
-    <artifactId>com.mapabc</artifactId>
+    <groupId>com.mapabc</groupId>
+    <artifactId>tile38-cli</artifactId>
     <version>2.0.1</version>
     <build>
         <plugins>
