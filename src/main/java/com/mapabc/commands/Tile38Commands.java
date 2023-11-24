@@ -66,6 +66,8 @@ public interface Tile38Commands extends Commands {
     @Command("AOFSHRINK")
     void aofShrink();
 
+    @Command("DEL ?0 ?1")
+    String delEntry(String key,String member);
 
     /******************************************************
      **                      查询                         **
@@ -287,7 +289,7 @@ public interface Tile38Commands extends Commands {
     String setElementWithField(String key, String id, String geojson , String fieldKeyName , String fieldValue);
 
 
-    @Command("SET ?0 ?1 OBJECT ?2 FIELD ?3 ?4 ?5 ?6")
+    @Command("SET ?0 ?1 OBJECT ?2 FIELD ?3 ?4 FIELD ?5 ?6")
     String setElementWithFields(String key, String id, String geojson , String field1KeyName , String field1Value , String field2KeyName , String field2Value);
 
     /**
